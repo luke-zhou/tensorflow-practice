@@ -4,17 +4,18 @@ from collections import Counter
 import pandas as pd
 import random
 import tensorflow as tf
-
+    
+positive_data_file_name = 'data-set/rt-polarity-test.pos'
+negative_data_file_name = 'data-set/rt-polarity-test.neg'
 
 def load_data():
-    words = [];
-    words += load_file('data-set/rt-polarity.neg')
-    words += load_file('data-set/rt-polarity.pos')
+
+    words = sum(load_file(negative_data_file_name),[]) + sum(load_file(positive_data_file_name),[])
     
     features = generate_features(words)
-    print(len(features))
+    print('lenth of feature: {}'.format(len(features)))
 
-    features_data = generate_features_date(features)
+    features_data = generate_features_data(features)
 
     data_size = len(features_data)
     random.shuffle(features_data)
@@ -44,23 +45,14 @@ def test():
     print(temp2[:3])
     print(temp2[3:])
 
-def generate_features_date(features):
-    def review_to_feature_vector(review, type):
-        tokenizer = RegexpTokenizer(r'[A-Za-z0-9.][A-Za-z0-9_.]*')
-        lemmatizer = WordNetLemmatizer()
-        words = [lemmatizer.lemmatize(word) for word in tokenizer.tokenize(review)]
+def generate_features_data(features):
+    def review_to_feature_vector(words, type):
         feature_vector = [1 if feature in words else 0 for feature in features]
         feature_vector.append(type)
         return feature_vector
     
-    features_data =[]
-    with open('data-set/rt-polarity.neg','r') as f:
-        lines = [line.lower() for line in f]
-        features_data += [review_to_feature_vector(line,0) for line in lines]
-    with open('data-set/rt-polarity.pos','r') as f:
-        lines = [line.lower() for line in f]
-        features_data += [review_to_feature_vector(line,1) for line in lines]
-    
+    features_data = [review_to_feature_vector(words_of_line, 0) for words_of_line in load_file(negative_data_file_name)] + [review_to_feature_vector(words_of_line, 1) for words_of_line in load_file(positive_data_file_name)]
+
     return features_data
 
 
@@ -74,9 +66,9 @@ def load_file(file_name):
     with open(file_name,'r') as f:
         tokenizer = RegexpTokenizer(r'[A-Za-z0-9.][A-Za-z0-9_.]*')
         lines = [line.lower() for line in f]
-        words = sum([tokenizer.tokenize(line) for line in lines], [])
+        words_of_lines = [tokenizer.tokenize(line) for line in lines]
         lemmatizer = WordNetLemmatizer()
-        lemmatized_words = [lemmatizer.lemmatize(word) for word in words]
+        lemmatized_words = [[lemmatizer.lemmatize(word) for word in words] for words in words_of_lines]
         return lemmatized_words
 
 def train_input_fn(features, labels, batch_size):
@@ -85,8 +77,7 @@ def train_input_fn(features, labels, batch_size):
     dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))
 
     # Shuffle, repeat, and batch the examples.
-    dataset = dataset.shuffle(10000).repeat().batch(batch_size)
-
+    dataset = dataset.shuffle(300).repeat().batch(batch_size)
     # Return the dataset.
     return dataset
 
