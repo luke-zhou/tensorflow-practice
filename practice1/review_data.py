@@ -24,7 +24,7 @@ def load_data():
     training_features_data = features_data[test_data_size:]
 
     features.append('tf_classification_type')
-    print(features)
+    # print(features)
     test_data_frame = pd.DataFrame(test_features_data, columns=features)
     traning_data_frame = pd.DataFrame(training_features_data, columns=features)
 
@@ -32,18 +32,8 @@ def load_data():
     # print(traning_data_frame.keys())
     train_x, train_y = traning_data_frame, traning_data_frame.pop('tf_classification_type')
     test_x, test_y = test_data_frame, test_data_frame.pop('tf_classification_type')
-    print(train_y)
+    # print(train_y)
     return (train_x, train_y), (test_x, test_y)
-
-def test():
-    temp =[[1,2,3],[4,5,6],[7,8,9]]
-    column =['a', 'b', 'c']
-    df = pd.DataFrame(temp,columns=column)
-    print(df)
-
-    temp2 = [1,2,3,4,5,6,7,8,9,10]
-    print(temp2[:3])
-    print(temp2[3:])
 
 def generate_features_data(features):
     def review_to_feature_vector(words, type):
