@@ -12,7 +12,8 @@ def main():
     # Feature columns describe how to use the input.
     my_feature_columns = []
     for key in train_x.keys():
-        my_feature_columns.append(tf.feature_column.numeric_column(key=key))
+        categorical_column = tf.feature_column.categorical_column_with_identity(key=key, num_buckets=2)
+        my_feature_columns.append(tf.feature_column.indicator_column(categorical_column))
 
     # Build 2 hidden layer DNN with 10, 10 units respectively.
     classifier = tf.estimator.DNNClassifier(
@@ -26,7 +27,7 @@ def main():
     classifier.train(
         input_fn=lambda:review_data.train_input_fn(train_x, train_y,
                                                  1000),
-        steps=50)
+        steps=200)
 
     # Evaluate the model.
     eval_result = classifier.evaluate(
