@@ -5,8 +5,8 @@ import pandas as pd
 import random
 import tensorflow as tf
     
-positive_data_file_name = 'data-set/rt-polarity-test.pos'
-negative_data_file_name = 'data-set/rt-polarity-test.neg'
+positive_data_file_name = 'data-set/rt-polarity.pos'
+negative_data_file_name = 'data-set/rt-polarity.neg'
 
 def load_data():
 
@@ -17,23 +17,27 @@ def load_data():
 
     features_data = generate_features_data(features)
 
-    data_size = len(features_data)
-    random.shuffle(features_data)
-    test_data_size = int(data_size/10)
-    test_features_data = features_data[:test_data_size]
-    training_features_data = features_data[test_data_size:]
+    training_features_data, test_features_data = split_train_n_test(features_data)
 
     features.append('tf_classification_type')
     # print(features)
     test_data_frame = pd.DataFrame(test_features_data, columns=features)
     traning_data_frame = pd.DataFrame(training_features_data, columns=features)
 
-    print(traning_data_frame.head())
+    # print(traning_data_frame.head())
     # print(traning_data_frame.keys())
     train_x, train_y = traning_data_frame, traning_data_frame.pop('tf_classification_type')
     test_x, test_y = test_data_frame, test_data_frame.pop('tf_classification_type')
     # print(train_y)
     return (train_x, train_y), (test_x, test_y)
+
+def split_train_n_test(data, test_portion=0.1):
+    data_size = len(data)
+    random.shuffle(data)
+    test_data_size = int(data_size*test_portion)
+    test_data = data[:test_data_size]
+    training_data = data[test_data_size:]
+    return training_data, test_data
 
 def generate_features_data(features):
     def review_to_feature_vector(words, type):
@@ -67,7 +71,9 @@ def train_input_fn(features, labels, batch_size):
     dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))
 
     # Shuffle, repeat, and batch the examples.
-    dataset = dataset.shuffle(300).repeat().batch(batch_size)
+    buffer_size =int(len(features.index)*1.5)
+    print('shuffle buffer size: {}'.format(buffer_size))
+    dataset = dataset.shuffle(buffer_size).repeat().batch(batch_size)
     # Return the dataset.
     return dataset
 

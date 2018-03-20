@@ -5,6 +5,9 @@ def main():
 
     # Fetch the data
     (train_x, train_y), (test_x, test_y) = review_data.load_data()
+    # print(type(train_x))
+    print('training data size: {}'.format(len(train_x.index)))
+    print('testing data size: {}'.format(len(test_x.index)))
 
     # Feature columns describe how to use the input.
     my_feature_columns = []
@@ -15,20 +18,20 @@ def main():
     classifier = tf.estimator.DNNClassifier(
         feature_columns=my_feature_columns,
         # Two hidden layers of 10 nodes each.
-        hidden_units=[10, 10],
+        hidden_units=[500, 250, 100],
         # The model must choose between 3 classes.
         n_classes=2)
 
     # Train the Model.
     classifier.train(
         input_fn=lambda:review_data.train_input_fn(train_x, train_y,
-                                                 70),
-        steps=100)
+                                                 1000),
+        steps=50)
 
     # Evaluate the model.
     eval_result = classifier.evaluate(
         input_fn=lambda:review_data.eval_input_fn(test_x, test_y,
-                                                5))
+                                                500))
 
     print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
