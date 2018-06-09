@@ -42,7 +42,7 @@ def update_ozlotto_latest_result():
     part_results = get_result(1246, 1269)
     missing_results.extend(part_results)
 
-    missing_results.reverse()
+    missing_results.sort(key = lambda result: result['DrawNumber'])
     print(len(missing_results))
     with open('resource/Ozlotto-latest.csv', 'a', newline='') as csvfile:
         result_file = csv.writer(csvfile, delimiter=',')
