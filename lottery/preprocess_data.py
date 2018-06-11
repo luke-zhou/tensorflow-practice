@@ -1,12 +1,12 @@
 import csv
 
-def preproces(csv_file):
-    test_number = '1'
+def preproces(csv_file, test_num):
+    test_number = str(test_num)
     with open(csv_file, newline='') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
         results=[row for row in csv_reader]
         # print(results)
-        with open('resource/preprocess-data.csv', 'w', newline='') as data_csv_file:
+        with open('resource/preprocess-data-'+test_number+'.csv', 'w', newline='') as data_csv_file:
             data_file = csv.writer(data_csv_file, delimiter=',')
 
             for i in range(1, len(results)):
@@ -24,5 +24,7 @@ def preproces(csv_file):
                     row.append('0')
                 data_file.writerow(row)
         data_csv_file.close()   
+
 if __name__ == '__main__':
-    preproces('resource/Ozlotto-latest.csv')
+    for i in range(1,46):
+        preproces('resource/Ozlotto-latest.csv', i)
