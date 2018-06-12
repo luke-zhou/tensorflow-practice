@@ -1,22 +1,26 @@
 import pandas as pd
 import tensorflow as tf
 
-CSV_COLUMN_NAMES = ['draw_number','date','num1','numb2','numb3','numb4','numb5','numb6','numb7','sup1','sup2','result']
-RESULTS = ['0', '1', '2']
+CSV_COLUMN_NAMES = ['draw_number', 'date', 'numb1', 'numb2', 'numb3',
+                    'numb4', 'numb5', 'numb6', 'numb7', 'sup1', 'sup2', 'result']
+RESULTS = ['Not There', 'Supply', 'Number']
 
-def load_data(y_name='result'):
+
+def load_data(file_name, y_name='result'):
     """Returns the lotto dataset as (train_x, train_y), (test_x, test_y)."""
-    csv_file_path = 'resource/preprocess-data-2.csv'
+    csv_file_path = file_name
 
-    dataframe = pd.read_csv(csv_file_path, names=CSV_COLUMN_NAMES, header=0).sample(frac=1)
+    dataframe = pd.read_csv(
+        csv_file_path, names=CSV_COLUMN_NAMES, header=0).sample(frac=1)
 
     train, test = split_train_n_test(dataframe)
-    
+
     train_x, train_y = train, train.pop(y_name)
 
     test_x, test_y = test, test.pop(y_name)
 
     return (train_x, train_y), (test_x, test_y)
+
 
 def split_train_n_test(data, test_portion=0.1):
     data_size = len(data)
@@ -24,6 +28,7 @@ def split_train_n_test(data, test_portion=0.1):
     test_data = data[:test_data_size]
     training_data = data[test_data_size:]
     return training_data, test_data
+
 
 def train_input_fn(features, labels, batch_size):
     """An input function for training"""
@@ -36,9 +41,10 @@ def train_input_fn(features, labels, batch_size):
     # Return the dataset.
     return dataset
 
+
 def eval_input_fn(features, labels, batch_size):
     """An input function for evaluation or prediction"""
-    features=dict(features)
+    features = dict(features)
     if labels is None:
         # No labels, use only features.
         inputs = features
@@ -62,6 +68,7 @@ def eval_input_fn(features, labels, batch_size):
 # `tf.parse_csv` sets the types of the outputs to match the examples given in
 #     the `record_defaults` argument.
 CSV_TYPES = [[0.0], [0.0], [0.0], [0.0], [0]]
+
 
 def _parse_line(line):
     # Decode the line into its fields
