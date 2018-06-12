@@ -19,15 +19,15 @@ def main():
     classifier = tf.estimator.DNNClassifier(
         feature_columns=my_feature_columns,
         # Two hidden layers of 10 nodes each.
-        hidden_units=[500, 250, 100],
+        hidden_units=[500, 250],
         # The model must choose between 3 classes.
         n_classes=2)
 
     # Train the Model.
     classifier.train(
         input_fn=lambda:review_data.train_input_fn(train_x, train_y,
-                                                 1000),
-        steps=200)
+                                                 2000),
+        steps=1500)
 
     # Evaluate the model.
     eval_result = classifier.evaluate(
