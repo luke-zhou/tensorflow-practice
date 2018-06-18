@@ -1,4 +1,6 @@
 import csv
+import lotto_data
+from datetime import datetime
 
 
 def preproces(csv_file, test_num):
@@ -9,10 +11,18 @@ def preproces(csv_file, test_num):
         # print(results)
         with open('resource/preprocess-data-'+test_number+'.csv', 'w', newline='') as data_csv_file:
             data_file = csv.writer(data_csv_file, delimiter=',')
-            data_file.writerow(['draw_number', 'date', 'numb1', 'numb2', 'numb3',
-                                'numb4', 'numb5', 'numb6', 'numb7', 'sup1', 'sup2', 'result'])
-            for i in range(1, len(results)):
+            data_file.writerow(lotto_data.CSV_COLUMN_NAMES)
+
+            for i in range(2, len(results)):
                 row = [results[i][0], results[i][1]]
+                draw_datetime = datetime.strptime(results[i][1], '%Y%m%d')
+                draw_date = draw_datetime.date()
+                row.append(draw_date.year)
+                row.append(draw_date.month)
+                row.append(draw_date.day)
+
+                for j in range(2, 11):
+                    row.append(results[i-2][j])
                 for j in range(2, 11):
                     row.append(results[i-1][j])
 

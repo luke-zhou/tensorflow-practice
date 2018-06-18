@@ -1,8 +1,10 @@
 import pandas as pd
 import tensorflow as tf
 
-CSV_COLUMN_NAMES = ['draw_number', 'date', 'numb1', 'numb2', 'numb3',
-                    'numb4', 'numb5', 'numb6', 'numb7', 'sup1', 'sup2', 'result']
+CSV_COLUMN_NAMES = ['draw_number', 'date', 'date-year','date-month','date-day',
+                    'numb1-2', 'numb2-2', 'numb3-2','numb4-2', 'numb5-2', 'numb6-2', 'numb7-2', 'sup1-2', 'sup2-2',
+                    'numb1-1', 'numb2-1', 'numb3-1','numb4-1', 'numb5-1', 'numb6-1', 'numb7-1', 'sup1-1', 'sup2-1',  
+                    'result']
 RESULTS = ['Not There', 'Supply', 'Number']
 
 

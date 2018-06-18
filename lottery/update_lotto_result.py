@@ -51,5 +51,13 @@ def update_ozlotto_latest_result():
             result_file.writerow([result['DrawNumber'], draw_date.strftime('%Y%m%d')]+result['PrimaryNumbers']+result['SecondaryNumbers'])
     csvfile.close()   
 
+def add_ozlotto_result(draw):
+    result = get_result(draw, draw)[0]
+    with open('resource/Ozlotto-latest.csv', 'a', newline='') as csvfile:
+        result_file = csv.writer(csvfile, delimiter=',')
+        draw_date = datetime.strptime(result['DrawDate'], '%Y-%m-%dT%H:%M:%S')
+        result_file.writerow([result['DrawNumber'], draw_date.strftime('%Y%m%d')]+result['PrimaryNumbers']+result['SecondaryNumbers'])
+    csvfile.close() 
+
 if __name__ == '__main__':
-    update_ozlotto_latest_result()
+    add_ozlotto_result(1269)

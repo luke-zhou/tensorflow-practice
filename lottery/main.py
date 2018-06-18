@@ -11,9 +11,19 @@ def main(file_name, num):
     # print('x-key')
     # print(train_x.keys())
     for key in train_x.keys():
-        if key == 'draw_number' or key == 'date':
+        if key == 'draw_number' or key == 'date' or key == 'date-year':
             my_feature_columns.append(
                 tf.feature_column.numeric_column(key=key))
+        elif key == 'date-month':
+            feature_column = tf.feature_column.categorical_column_with_identity(
+                key=key, num_buckets=13)
+            my_feature_columns.append(
+                tf.feature_column.indicator_column(feature_column))
+        elif key == 'date-day':
+            feature_column = tf.feature_column.categorical_column_with_identity(
+                key=key, num_buckets=32)
+            my_feature_columns.append(
+                tf.feature_column.indicator_column(feature_column))
         else:
             feature_column = tf.feature_column.categorical_column_with_identity(
                 key=key, num_buckets=46)
@@ -41,17 +51,29 @@ def main(file_name, num):
     print('Test set accuracy: {accuracy:0.3f}'.format(**eval_result))
 
     predict_x = {
-        'draw_number': [1269],
-        'date': [20180612],
-        'numb1': [11],
-        'numb2': [18],
-        'numb3': [23],
-        'numb4': [30],
-        'numb5': [33],
-        'numb6': [37],
-        'numb7': [45],
-        'sup1': [3],
-        'sup2': [6],
+        'draw_number': [1270],
+        'date': [20180619],
+        'date-year': [2018],
+        'date-month': [6],
+        'date-day':[19],
+        'numb1-2': [11],
+        'numb2-2': [30],
+        'numb3-2': [45],
+        'numb4-2': [18],
+        'numb5-2': [33],
+        'numb6-2': [37],
+        'numb7-2': [23],
+        'sup1-2': [6],
+        'sup2-2': [3],
+        'numb1-1': [22],
+        'numb2-1': [2],
+        'numb3-1': [31],
+        'numb4-1': [38],
+        'numb5-1': [12],
+        'numb6-1': [7],
+        'numb7-1': [45],
+        'sup1-1': [11],
+        'sup2-1': [29],
     }
 
     predictions = classifier.predict(input_fn=lambda: lotto_data.eval_input_fn(
