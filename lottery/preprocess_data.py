@@ -13,7 +13,7 @@ def preproces(csv_file, test_num):
             data_file = csv.writer(data_csv_file, delimiter=',')
             data_file.writerow(lotto_data.CSV_COLUMN_NAMES)
 
-            for i in range(2, len(results)):
+            for i in range(10, len(results)):
                 row = [results[i][0], results[i][1]]
                 draw_datetime = datetime.strptime(results[i][1], '%Y%m%d')
                 draw_date = draw_datetime.date()
@@ -21,6 +21,22 @@ def preproces(csv_file, test_num):
                 row.append(draw_date.month)
                 row.append(draw_date.day)
 
+                for j in range(2, 11):
+                    row.append(results[i-10][j])
+                for j in range(2, 11):
+                    row.append(results[i-9][j])
+                for j in range(2, 11):
+                    row.append(results[i-8][j])
+                for j in range(2, 11):
+                    row.append(results[i-7][j])
+                for j in range(2, 11):
+                    row.append(results[i-6][j])
+                for j in range(2, 11):
+                    row.append(results[i-5][j])
+                for j in range(2, 11):
+                    row.append(results[i-4][j])
+                for j in range(2, 11):
+                    row.append(results[i-3][j])
                 for j in range(2, 11):
                     row.append(results[i-2][j])
                 for j in range(2, 11):
