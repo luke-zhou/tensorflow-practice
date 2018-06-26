@@ -1,11 +1,10 @@
 from datetime import datetime
-def test():
 
-    draw_datetime = datetime.strptime('20180612', '%Y%m%d')
-    draw_date = draw_datetime.date()
-    print(draw_date.year)
-    print(draw_date.month)
-    print(draw_date.week)
+
+def test():
+    test_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    print(test_list[2:3])
+
 
 if __name__ == '__main__':
     test()
