@@ -1,7 +1,6 @@
 import pandas as pd
 import tensorflow as tf
 
-CSV_COLUMN_NAMES = build_column_names()
 tracing_back_count = 10
 
 
@@ -15,6 +14,9 @@ def build_column_names():
         columns.append('sup2'+'-'+str(i))
     columns.append('result')
     return columns
+
+
+CSV_COLUMN_NAMES = build_column_names()
 
 
 RESULTS = ['Not There', 'Supply', 'Number']
