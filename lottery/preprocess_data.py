@@ -2,10 +2,11 @@ import csv
 import lotto_data
 from datetime import datetime
 
+tracing_back_count = 10
+
 
 def preproces_one_num(csv_file, test_num):
     test_number = str(test_num)
-    tracing_back_count = 10
     with open(csv_file, newline='') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
         results = [row for row in csv_reader]
