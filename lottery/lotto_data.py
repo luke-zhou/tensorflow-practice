@@ -1,10 +1,24 @@
 import pandas as pd
 import tensorflow as tf
 
-CSV_COLUMN_NAMES = ['draw_number', 'date', 'date-year','date-month','date-day',
-                    'numb1-2', 'numb2-2', 'numb3-2','numb4-2', 'numb5-2', 'numb6-2', 'numb7-2', 'sup1-2', 'sup2-2',
-                    'numb1-1', 'numb2-1', 'numb3-1','numb4-1', 'numb5-1', 'numb6-1', 'numb7-1', 'sup1-1', 'sup2-1',  
-                    'result']
+tracing_back_count = 10
+
+
+def build_column_names():
+    columns = ['draw_number', 'date',
+               'date-year', 'date-month', 'date-day']
+    for i in range(tracing_back_count, 0, -1):
+        for j in range(1, 8):
+            columns.append('num'+str(j)+'-'+str(i))
+        columns.append('sup1'+'-'+str(i))
+        columns.append('sup2'+'-'+str(i))
+    columns.append('result')
+    return columns
+
+
+CSV_COLUMN_NAMES = build_column_names()
+
+
 RESULTS = ['Not There', 'Supply', 'Number']
 
 
