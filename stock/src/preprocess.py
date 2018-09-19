@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+from functools import reduce
 
 tracing_back_count = 10
 
@@ -52,6 +53,16 @@ def preproces(file_name):
         csv_reader = csv.reader(csv_file, delimiter=',')
         results = [row for row in csv_reader]
         print(results)
+
+def nGroup(list, n):
+    for i in range(len(list)):
+        if i+n >= len(list):
+            yield None
+        else:
+            result = list[i:i+n]
+            hasNone = reduce((lambda x,y: x or y), map((lambda x: x is None),result))
+            yield None if hasNone else result
+
 
 if __name__ == '__main__':
     preproces('../data/test-data.csv')
