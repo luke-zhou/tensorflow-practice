@@ -1,6 +1,5 @@
 import csv
 from datetime import datetime
-from functools import reduce
 
 tracing_back_count = 10
 
@@ -36,18 +35,6 @@ def generate_date_entry(date_str):
     entries.append(draw_date.day)
     return entries
 
-
-def generate_result_category(test_num, result_list):
-    if test_num in result_list:
-        index = result_list.index(test_num)
-        if index >= 2 and index <= 8:
-            return '2'
-        else:
-            return '1'
-    else:
-        return '0'
-
-
 def preproces(file_name):
     with open(file_name) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -60,8 +47,7 @@ def nGroup(list, n):
             yield None
         else:
             result = list[i:i+n]
-            hasNone = reduce((lambda x,y: x or y), map((lambda x: x is None),result))
-            yield None if hasNone else result
+            yield None if any(e is None for e in result) else result
 
 
 if __name__ == '__main__':
