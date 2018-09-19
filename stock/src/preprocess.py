@@ -48,9 +48,10 @@ def generate_result_category(test_num, result_list):
 
 
 def preproces(file_name):
-    with open(csv_file) as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
+    with open(file_name) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
         results = [row for row in csv_reader]
+        print(results)
 
 if __name__ == '__main__':
-    preproces('data/cba-data.csv')
+    preproces('../data/test-data.csv')
