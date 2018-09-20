@@ -11,20 +11,37 @@ def preproces(file_name):
             if group is not None:
                 group_records.append(group)
     csv_file.close()
+    # print(group_records)
     with open('../training_data/preprocess-'+ str(tracing_back_count) +'.csv', 'w', newline='') as output_csv_file:
         writer = csv.writer(output_csv_file, delimiter=',')
         for group in group_records:
             features =[]
             for i in range(tracing_back_count):
+                nums = []
                 for num in group[i]:
                     try:
                         v = float(num)
-                        features.append(v)
+                        nums.append(v)
                     except ValueError:
                         pass
+            features.extend(generate_features(nums))
             writer.writerow(features)
 
     output_csv_file.close()
+def generate_features(list):  
+    open = list[0]
+    high = list[1]
+    low = list[2]
+    close = list[3]
+    features =[]
+    features.append(open-high)
+    features.append(open-low)
+    features.append(open-close)
+    features.append(high-low)
+    features.append(high-close)
+    features.append(low-close)
+    return [n/open for n in features]
+
 
 def nGroup(list, n):
     for i in range(len(list)):

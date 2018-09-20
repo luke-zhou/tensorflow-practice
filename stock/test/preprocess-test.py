@@ -7,7 +7,7 @@ def test_nGroup():
     for r in preprocess.nGroup(testList, 3):
         print(r)
 
-def test():
+def test_isGroupVaild():
     testList1 =[
         ['1999-01-24',22.577700,22.577700,22.378700,22.537901,22.537901,691858],
         ['1999-01-25','null','null','null','null','null','null'],
@@ -43,6 +43,11 @@ def test():
         ['1999-01-27',23.472799,23.472799,22.876101,23.423100,23.423100,1572709]
         ]
     print(preprocess.isGroupValid(testList5))
+
+def test():
+    testList =[1,2,3,4,5,6]
+    result = preprocess.generate_features(testList)
+    print(result)
 
 if __name__=='__main__':
     test()
