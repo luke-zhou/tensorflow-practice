@@ -45,9 +45,16 @@ def test_isGroupVaild():
     print(preprocess.isGroupValid(testList5))
 
 def test():
-    testList =[1,2,3,4,5,6]
+    testList =[ [1,2,3,4,5,6], 
+                [2,3,4,5,6,7],
+                [3,4,5,6,7,8], 
+                [8,9,10,11,12,13],
+                [9,10,11,12,13,14], 
+                [10,11,12,13,14,15]
+    ]
     result = preprocess.generate_features(testList)
     print(result)
 
 if __name__=='__main__':
     test()
+    print(0=='0')
