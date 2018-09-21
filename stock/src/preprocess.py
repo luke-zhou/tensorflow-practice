@@ -14,7 +14,7 @@ def preproces(file_name):
                 group_records.append(group)
     csv_file.close()
     # print(group_records)
-    with open('../training_data/preprocess-'+ str(tracing_back_count*5) +'.csv', 'w', newline='') as output_csv_file:
+    with open('../trainingdata/preprocess-'+ str(tracing_back_count*5) +'.csv', 'w', newline='') as output_csv_file:
         writer = csv.writer(output_csv_file, delimiter=',')
         for group in group_records:
             features = generate_features(group)
@@ -26,7 +26,7 @@ def preproces(file_name):
 
 ## list example: [1999-01-03,23.443001,23.443001,22.776600,22.776600,22.776600,1050290]
 def generate_result(list):
-    return float(list[4]) > float(list[1])
+    return 1 if float(list[4]) > float(list[1]) else 0
 
 ## group example: [ [1,2,3,4,5,6], 
 #                   [2,3,4,5,6,7],
