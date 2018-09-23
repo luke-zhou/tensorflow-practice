@@ -1,24 +1,22 @@
 import csv
 
-tracing_back_count = 5
-
-def preproces(file_name):
+def preproces(file_name, feature_group_size):
     group_records =[]
     with open(file_name) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         #skip header 
         next(csv_reader, None)
         results = [row for row in csv_reader]
-        for group in n_group(results, tracing_back_count+1):
+        for group in n_group(results, feature_group_size+1):
             if group is not None:
                 group_records.append(group)
     csv_file.close()
     # print(group_records)
-    with open('../trainingdata/preprocess-'+ str(tracing_back_count*5) +'.csv', 'w', newline='') as output_csv_file:
+    with open('../trainingdata/preprocess-'+ str(feature_group_size*5) +'.csv', 'w', newline='') as output_csv_file:
         writer = csv.writer(output_csv_file, delimiter=',')
         for group in group_records:
             features = generate_features(group)
-            result = generate_result(group[tracing_back_count]) 
+            result = generate_result(group[feature_group_size]) 
             row = [*features, result]
             writer.writerow(row)
 
@@ -37,7 +35,7 @@ def generate_result(list):
 #                   ]
 def generate_features(group):  
     features =[]
-    for i in range(tracing_back_count):
+    for i in range(len(group)-1):
         nums = []
         for num in group[i]:
             try:
@@ -73,4 +71,4 @@ def is_group_valid(list):
 
 if __name__ == '__main__':
     # preproces('../data/test-data.csv')
-    preproces('../data/cba-data.csv')
+    preproces('../data/cba-data.csv', 5)
