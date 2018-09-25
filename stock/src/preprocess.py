@@ -1,6 +1,6 @@
 import csv
 
-def preproces(file_name, feature_group_size):
+def preproces(file_name, feature_group_size, result_group_size):
     group_records =[]
     with open(file_name) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -15,16 +15,16 @@ def preproces(file_name, feature_group_size):
     with open('../trainingdata/preprocess-'+ str(feature_group_size*5) +'.csv', 'w', newline='') as output_csv_file:
         writer = csv.writer(output_csv_file, delimiter=',')
         for group in group_records:
-            features = generate_features(group)
-            result = generate_result(group[feature_group_size]) 
+            features = generate_features(group[:-result_group_size])
+            result = generate_result(group[-result_group_size:]) 
             row = [*features, result]
             writer.writerow(row)
 
     output_csv_file.close()
 
 ## list example: [1999-01-03,23.443001,23.443001,22.776600,22.776600,22.776600,1050290]
-def generate_result(list):
-    return 1 if float(list[4]) > float(list[1]) else 0
+def generate_result(group):
+    return 1 if float(group[0][4]) > float(group[-1][1]) else 0
 
 ## group example: [ [1,2,3,4,5,6], 
 #                   [2,3,4,5,6,7],
@@ -35,7 +35,7 @@ def generate_result(list):
 #                   ]
 def generate_features(group):  
     features =[]
-    for i in range(len(group)-1):
+    for i in range(len(group)):
         nums = []
         for num in group[i]:
             try:
@@ -71,4 +71,4 @@ def is_group_valid(list):
 
 if __name__ == '__main__':
     # preproces('../data/test-data.csv')
-    preproces('../data/cba-data.csv', 5)
+    preproces('../data/cba-data.csv', 10, 3)
