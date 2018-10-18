@@ -60,4 +60,5 @@ def add_ozlotto_result(draw):
     csvfile.close() 
 
 if __name__ == '__main__':
-    add_ozlotto_result(1269)
+    for i in range(1271, 1288):
+        add_ozlotto_result(i)
