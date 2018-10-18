@@ -2,7 +2,7 @@ import tensorflow as tf
 import stock_data
 
 def main(args):
-    (train_x, train_y), (test_x, test_y) = stock_data.load_data('../trainingdata/preprocess-25.csv')
+    (train_x, train_y), (test_x, test_y) = stock_data.load_data('../trainingdata/preprocess-50.csv')
 
     feature_columns = [tf.feature_column.numeric_column(key=key) for key in train_x.keys()]
 
