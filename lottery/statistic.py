@@ -1,17 +1,28 @@
 import pandas as pd 
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 def main():
     print('main')
     lottery_df = pd.read_csv('resource/Ozlotto-latest.csv')
     # print(lottery_df)
-    # print(lottery_df.shape)
-    lottery_df.astype('int64')
+    print(lottery_df.shape)
     # print(lottery_df.dtypes)
     lottery_df = preprocess(lottery_df)
-    # print(lottery_df.head(20))
-    # print(lottery_df.dtypes)
+    print(lottery_df['p-1-num1'])
+    print(lottery_df.head())
+    print(lottery_df.shape)
+    lottery_df.to_csv('resource/oz-latest-df.csv')
     lottery_df = calculate_statistic(lottery_df)
+    print(lottery_df.mean())
+    lottery_df.mean().to_csv('resource/oz-latest-df-mean.csv')
+    # lottery_df.plot()
+    # plt.show()
+
+
+
 
 def preprocess(df):
     for previous in range(1, 11):
@@ -21,22 +32,59 @@ def preprocess(df):
         for i in range(1, 3):
             sup_column_name = 'sup{}'.format(i)
             df['p-{}-{}'.format(previous, sup_column_name)] = df[sup_column_name].shift(previous)
-        
+
+    df = df.dropna(how='any').astype('int64')
+
+    for previous in range(1, 11):
+        df['p-{}'.format(previous)]=np.full((len(df),), 0)
+        df['p-{}'.format(previous)] = df['p-{}'.format(previous)].apply(lambda x : [])
+        for i in range(1, 8):
+            num_column_name = 'num{}'.format(i)
+            df['p-{}'.format(previous)] += df['p-{}-{}'.format(previous, num_column_name)].apply(lambda x: [x])
+    df['current']=np.full((len(df),), 0)
+    df['current'] = df['current'].apply(lambda x : [])
+    for i in range(1, 8):
+        num_column_name = 'num{}'.format(i)
+        df['current'] += df[num_column_name].apply(lambda x: [x])    
+    
+    df['random'] = df.index.map(generate_one_ticket)
+    
     return df
 
 def calculate_statistic(df):
-    for previous in range(1, 11):
-        column_name='appear_in_previous_{}'.format(previous)
-        num_column_names = ['num{}'.format(i) for i in range(1, 8)]
-        df[column_name] = check_previous_n_overlap_current(previous)
+    for index, row in df.iterrows():
+        
+        random_sames = set(row['random']) & set(row['current'])
+        df.at[index, 'base-line-appear'] = 0 if not random_sames else 1
+        df.at[index, 'base-line-appear-count'] = len(random_sames)
 
-        np.NaN if df['p-{}-num1'.format(previoue)].isnull() else 1 if df['p-{}-num1'.format(previoue)] == df['num1'] else 0
-        t_df=[df['p-{}-{}'.format(previous, num_column_name)] for num_column_name in num_column_names]
-        print(t_df.head(20))
-        print(t_df.shape)
+
+        for previous in range(1, 11):
+            previous_nums = set()
+            previous_common = set()
+            for i in range(1, previous+1):
+                previous_common |= previous_nums & set(row['p-{}'.format(i)])
+                previous_nums |= set(row['p-{}'.format(i)])
+
+            same_nums = [e for e in row['current'] if e in previous_nums]
+            same_nums_previous_common =  set(row['current']) & previous_common
+            df.at[index,'p-{}-appear'.format(previous)] = 0 if not same_nums else 1
+            df.at[index,'p-{}-appear-count'.format(previous)] = len(same_nums)
+            df.at[index,'p-{}-exclude-count'.format(previous)] = len(previous_nums)
+            df.at[index, 'p-{}-previous-common-appear'.format(previous)] = 0 if not same_nums_previous_common else 1
+            df.at[index, 'p-{}-previous-common-appear-count'.format(previous)] = len(same_nums_previous_common)
+            df.at[index, 'p-{}-previous-common-exclude-count'.format(previous)] = len(previous_common)
+        
+    
     return df
-def check_previous_n_overlap_current(previous):
-    if df['p-{}-num1'.format(previoue)].isnull()
+
+def generate_one_ticket(any):
+    ticket = set()
+    while (len(ticket)<7):
+        ticket.add(np.random.random_integers(45))
+    
+    return list(ticket)
+    
 
 if  __name__  == '__main__':
     main()
