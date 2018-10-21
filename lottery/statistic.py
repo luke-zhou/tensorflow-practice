@@ -48,6 +48,9 @@ def preprocess(df):
         df['current'] += df[num_column_name].apply(lambda x: [x])    
     
     df['random'] = df.index.map(generate_one_ticket)
+
+    for previous in range(1, 11):
+         df['p-{}-9-gong'.format(previous)]= df['p-{}'.format(previous)].map(map_to_9_gong)
     
     return df
 
@@ -74,6 +77,10 @@ def calculate_statistic(df):
             df.at[index, 'p-{}-previous-common-appear'.format(previous)] = 0 if not same_nums_previous_common else 1
             df.at[index, 'p-{}-previous-common-appear-count'.format(previous)] = len(same_nums_previous_common)
             df.at[index, 'p-{}-previous-common-exclude-count'.format(previous)] = len(previous_common)
+            same_nums_one_previous_only = set(row['p-{}'.format(previous)]) & set(row['current'])
+            df.at[index,'p-{}-only-appear'.format(previous)] = 0 if not same_nums_one_previous_only else 1
+            df.at[index,'p-{}-only-appear-count'.format(previous)] = len(same_nums_one_previous_only)
+            df.at[index,'p-{}-only-exclude-count'.format(previous)] = len(row['p-{}'.format(previous)])
         
     
     return df
@@ -84,6 +91,10 @@ def generate_one_ticket(any):
         ticket.add(np.random.random_integers(45))
     
     return list(ticket)
+
+def map_to_9_gong(list1):
+    nine_gong = [2,9,4,7,5,3,6,1,8]
+    return [(a*b)%45+1 for a,b in zip(list1,nine_gong)]
     
 
 if  __name__  == '__main__':
