@@ -1,27 +1,46 @@
 import pandas as pd 
 import numpy as np
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
+# import matplotlib
+# matplotlib.use('TkAgg')
+# import matplotlib.pyplot as plt
+import time
 
 def main():
     print('main')
+    np.random.seed(int(time.time()))
     lottery_df = pd.read_csv('resource/Ozlotto-latest.csv')
     # print(lottery_df)
     print(lottery_df.shape)
     # print(lottery_df.dtypes)
     lottery_df = preprocess(lottery_df)
-    print(lottery_df['p-1-num1'])
-    print(lottery_df.head())
-    print(lottery_df.shape)
+    lottery_df = generate_tickets(lottery_df)
+    # print(lottery_df['p-1-num1'])
+    # print(lottery_df.head())
+    # print(lottery_df.shape)
     lottery_df.to_csv('resource/oz-latest-df.csv')
     lottery_df = calculate_statistic(lottery_df)
-    print(lottery_df.mean())
+    # print(lottery_df.mean())
     lottery_df.mean().to_csv('resource/oz-latest-df-mean.csv')
     # lottery_df.plot()
     # plt.show()
+    lottery_df = check_win(lottery_df)
+    lottery_df.loc[:, 'random-ticket-win':].to_csv('resource/oz-latest-df-win-result.csv')
+    lottery_df.loc[:, 'random-ticket-win':].describe().to_csv('resource/oz-latest-df-win-result-describe.csv')
 
-
+def check_win(df):
+    ticket_column =['random-ticket', 
+    'low-appearing-rate-nums-12-remove-ticket',
+    'low-appearing-rate-nums-6-remove-ticket',
+    'low-appearing-rate-num-each-10-remove-ticket',
+    'low-appearing-rate-num-each-7-remove-ticket'
+    ]
+    for index, row in df.iterrows():
+        for column in ticket_column:
+            right_nums = set(row[column]) & set(row['current'])
+            df.at[index, column+'-win'] = 1 if right_nums else 0
+            df.at[index, column+'-win-count'] = len(right_nums)
+    
+    return df
 
 
 def preprocess(df):
@@ -47,12 +66,73 @@ def preprocess(df):
         num_column_name = 'num{}'.format(i)
         df['current'] += df[num_column_name].apply(lambda x: [x])    
     
-    df['random'] = df.index.map(generate_one_ticket)
+    df['random'] = df.index.map(generate_random_ticket)
 
-    for previous in range(1, 11):
-         df['p-{}-9-gong'.format(previous)]= df['p-{}'.format(previous)].map(map_to_9_gong)
-    
     return df
+
+def generate_tickets(df):
+    # random as baseline
+    df['random-ticket'] = df.index.map(generate_random_ticket)
+
+    # remove nums by appearing rate 12
+    low_appearing_rate_nums_12 =[  (3,4), (9,7), (9,4),
+                                (9,5), (7,2), (1,5),
+                                (6,6), (9,3), (1,7),
+                                (2,1), (6,3), (10,1)
+                                ]
+    df['low-appearing-rate-nums-12'] = df.index.map(lambda x : [])
+    for (p,i) in low_appearing_rate_nums_12:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['low-appearing-rate-nums-12'] += df[column_name].apply(lambda x: [x])
+    df['low-appearing-rate-nums-12-remove-ticket'] = df['low-appearing-rate-nums-12'].map(generate_tickets_without_nums)
+    # print(df['low-appearing-rate-nums-12-remove-ticket'])    
+
+    # remove nums by appearing rate 6
+    low_appearing_rate_nums_6 =[  (3,4), (9,7), (9,4),
+                                (9,5), (7,2), (1,5)
+                                ]
+    df['low-appearing-rate-nums-6'] = df.index.map(lambda x : [])
+    for (p,i) in low_appearing_rate_nums_6:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['low-appearing-rate-nums-6'] += df[column_name].apply(lambda x: [x])
+    df['low-appearing-rate-nums-6-remove-ticket'] = df['low-appearing-rate-nums-6'].map(generate_tickets_without_nums)
+   
+    # remove lowest apperaing rate num in each draw 10
+    low_appearing_rate_num_each_10 = [
+        (1,7), (2,1), (3,4), (4,1), (5,7),
+        (6,6), (7,2), (8,4), (9,7), (10,1)
+    ]
+    df['low-appearing-rate-num-each-10'] = df.index.map(lambda x : [])
+    for (p,i) in low_appearing_rate_num_each_10:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['low-appearing-rate-num-each-10'] += df[column_name].apply(lambda x: [x])
+    df['low-appearing-rate-num-each-10-remove-ticket'] = df['low-appearing-rate-num-each-10'].map(generate_tickets_without_nums)
+
+
+    # remove lowest apperaing rate num in each draw 7
+    low_appearing_rate_num_each_7 = [
+        (1,7), (2,1), (3,4), 
+        (6,6), (7,2), (9,7), (10,1)
+    ]
+    df['low-appearing-rate-num-each-7'] = df.index.map(lambda x : [])
+    for (p,i) in low_appearing_rate_num_each_7:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['low-appearing-rate-num-each-7'] += df[column_name].apply(lambda x: [x])
+    df['low-appearing-rate-num-each-7-remove-ticket'] = df['low-appearing-rate-num-each-7'].map(generate_tickets_without_nums)
+
+    return df
+
+def generate_tickets_without_nums(nums):
+    nums.extend([10,42])
+    ticket = set()
+    while (len(ticket)<7):
+        num = np.random.randint(1, 45 + 1)
+        if num not in nums:
+            ticket.add(num)
+    
+    return list(ticket)
+
+
 
 def calculate_statistic(df):
     for index, row in df.iterrows():
@@ -60,6 +140,12 @@ def calculate_statistic(df):
         random_sames = set(row['random']) & set(row['current'])
         df.at[index, 'base-line-appear'] = 0 if not random_sames else 1
         df.at[index, 'base-line-appear-count'] = len(random_sames)
+
+        for previous in range(1, 11):
+            for i in range(1, 8):
+                column_name = 'p-{}-num{}'.format(previous, i)
+                df.at[index, column_name+'-appear']= 1 if row[column_name] in row['current'] else 0
+
 
 
         for previous in range(1, 11):
@@ -85,10 +171,10 @@ def calculate_statistic(df):
     
     return df
 
-def generate_one_ticket(any):
+def generate_random_ticket(any):
     ticket = set()
     while (len(ticket)<7):
-        ticket.add(np.random.random_integers(45))
+        ticket.add(np.random.randint(1, 45 + 1))
     
     return list(ticket)
 

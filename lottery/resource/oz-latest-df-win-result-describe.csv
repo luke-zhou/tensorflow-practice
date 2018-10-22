@@ -1,0 +1,9 @@
+,random-ticket-win,random-ticket-win-count,low-appearing-rate-nums-12-remove-ticket-win,low-appearing-rate-nums-12-remove-ticket-win-count,low-appearing-rate-nums-6-remove-ticket-win,low-appearing-rate-nums-6-remove-ticket-win-count,low-appearing-rate-num-each-10-remove-ticket-win,low-appearing-rate-num-each-10-remove-ticket-win-count,low-appearing-rate-num-each-7-remove-ticket-win,low-appearing-rate-num-each-7-remove-ticket-win-count
+count,669.0,669.0,669.0,669.0,669.0,669.0,669.0,669.0,669.0,669.0
+mean,0.7130044843049327,1.101644245142003,0.7414050822122571,1.133034379671151,0.7279521674140508,1.0732436472346787,0.7548579970104634,1.1121076233183858,0.7384155455904334,1.1689088191330343
+std,0.45269793531508795,0.916489161000311,0.43819013868274476,0.9262957748952135,0.44534736235630773,0.8611813544647234,0.4304932269243252,0.8375469673586183,0.4398263138385415,0.9333422200658426
+min,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+25%,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0
+50%,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+75%,1.0,2.0,1.0,2.0,1.0,2.0,1.0,2.0,1.0,2.0
+max,1.0,4.0,1.0,4.0,1.0,4.0,1.0,4.0,1.0,4.0
