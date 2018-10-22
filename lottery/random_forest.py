@@ -14,8 +14,10 @@ def main():
 
     features = features.drop(features.columns[0], axis=1)
     print(features.tail())
-    predict_features = np.array(features.iloc[(len(features)-1)])
+    predict_features = features.iloc[(len(features)-1)]
     print(predict_features)
+    predict_features = predict_features.loc[:, :'p-10-45']
+    print(predict_Features)
     features = features.drop(len(features)-1)
     print(features.tail())
 
@@ -39,7 +41,7 @@ def main():
     features = np.array(features)
     # print(features)
 
-    for i in range(45):
+    for i in range(1):
         # Split the data into training and testing sets
         train_features, test_features, train_labels, test_labels = train_test_split(features, labels[i], test_size = 0.25, random_state = 37)
 
