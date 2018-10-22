@@ -27,12 +27,34 @@ def main():
     lottery_df.loc[:, 'random-ticket-win':].to_csv('resource/oz-latest-df-win-result.csv')
     lottery_df.loc[:, 'random-ticket-win':].describe().to_csv('resource/oz-latest-df-win-result-describe.csv')
 
+    for p in range(1,11):
+        for i in range(1,46):
+            lottery_df['p-{}-{}'.format(p,i)]= lottery_df['p-{}'.format(p)].map(lambda x : i in x)
+    for i in range(1,46):       
+        lottery_df['current-'+str(i)] =lottery_df['current'].map(lambda x : i in x)
+
+    lottery_df.loc[:, 'p-1-1':].to_csv('resource/oz-latest-df-1-data.csv')
+
 def check_win(df):
-    ticket_column =['random-ticket', 
-    'low-appearing-rate-nums-12-remove-ticket',
-    'low-appearing-rate-nums-6-remove-ticket',
-    'low-appearing-rate-num-each-10-remove-ticket',
-    'low-appearing-rate-num-each-7-remove-ticket'
+    ticket_column =[
+        'random-ticket', 
+        'random-ticket-12', 
+        'random-ticket-15', 
+        'random-ticket-21', 
+    # 'low-appearing-rate-nums-12-remove-ticket',
+    # 'low-appearing-rate-nums-6-remove-ticket',
+    # 'low-appearing-rate-num-each-10-remove-ticket',
+    # 'low-appearing-rate-num-each-7-remove-ticket',
+    'high-appearing-rate-nums-12',
+    'high-appearing-rate-nums-15',
+    'high-appearing-rate-nums-21',
+    'high-appearing-rate-nums-12-select-ticket',
+    'high-appearing-rate-nums-15-select-ticket',
+    'high-appearing-rate-nums-21-select-ticket',
+    'high-appearing-rate-nums-12-select-ticket-8',
+    'high-appearing-rate-nums-15-select-ticket-8',
+    'high-appearing-rate-nums-21-select-ticket-8',
+    # 'high-appearing-rate-num-each-10-select-ticket'
     ]
     for index, row in df.iterrows():
         for column in ticket_column:
@@ -73,6 +95,9 @@ def preprocess(df):
 def generate_tickets(df):
     # random as baseline
     df['random-ticket'] = df.index.map(generate_random_ticket)
+    df['random-ticket-12'] = df.index.map(generate_random_ticket_12)
+    df['random-ticket-15'] = df.index.map(generate_random_ticket_15)
+    df['random-ticket-21'] = df.index.map(generate_random_ticket_21)
 
     # remove nums by appearing rate 12
     low_appearing_rate_nums_12 =[  (3,4), (9,7), (9,4),
@@ -120,14 +145,85 @@ def generate_tickets(df):
         df['low-appearing-rate-num-each-7'] += df[column_name].apply(lambda x: [x])
     df['low-appearing-rate-num-each-7-remove-ticket'] = df['low-appearing-rate-num-each-7'].map(generate_tickets_without_nums)
 
+    # select nums by high rating
+    high_appearing_rate_nums_12 =[  (2,6), (9,2), (10,3),
+                                (8,7), (2,5), (10,2),
+                                (1,2), (3,2), (5,3),
+                                (7,1), (9,6), (6,5)
+                                ]
+    df['high-appearing-rate-nums-12'] = df.index.map(lambda x : [])
+    for (p,i) in high_appearing_rate_nums_12:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['high-appearing-rate-nums-12'] += df[column_name].apply(lambda x: [x])
+    df['high-appearing-rate-nums-12-select-ticket'] = df['high-appearing-rate-nums-12'].map(generate_tickets_with_nums)
+    df['high-appearing-rate-nums-12-select-ticket-8'] = df['high-appearing-rate-nums-12'].map(generate_tickets_8_with_nums)
+
+    # select nums by high rating
+    high_appearing_rate_nums_15 =[  (2,6), (9,2), (10,3),
+                                (8,7), (2,5), (10,2),
+                                (1,2), (3,2), (5,3),
+                                (7,1), (9,6), (6,5),
+                                (3,7), (7,6), (2,7)
+                                ]
+    df['high-appearing-rate-nums-15'] = df.index.map(lambda x : [])
+    for (p,i) in high_appearing_rate_nums_15:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['high-appearing-rate-nums-15'] += df[column_name].apply(lambda x: [x])
+    df['high-appearing-rate-nums-15-select-ticket'] = df['high-appearing-rate-nums-15'].map(generate_tickets_with_nums)
+    df['high-appearing-rate-nums-15-select-ticket-8'] = df['high-appearing-rate-nums-15'].map(generate_tickets_8_with_nums)
+
+    # select nums by high rating
+    high_appearing_rate_nums_21 =[  (2,6), (9,2), (10,3),
+                                (8,7), (2,5), (10,2),
+                                (1,2), (3,2), (5,3),
+                                (7,1), (9,6), (6,5),
+                                (3,7), (7,6), (2,7),
+                                (1,6), (4,2), (1,3),
+                                (3,5), (4,7), (8,3)
+                                ]
+    df['high-appearing-rate-nums-21'] = df.index.map(lambda x : [])
+    for (p,i) in high_appearing_rate_nums_21:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['high-appearing-rate-nums-21'] += df[column_name].apply(lambda x: [x])
+    df['high-appearing-rate-nums-21-select-ticket'] = df['high-appearing-rate-nums-21'].map(generate_tickets_with_nums)
+    df['high-appearing-rate-nums-21-select-ticket-8'] = df['high-appearing-rate-nums-21'].map(generate_tickets_8_with_nums)
+
+    # select nums by high rating for each draw
+    high_appearing_rate_num_each_10 = [
+        (1,2), (2,6), (3,2), (4,2), (5,3),
+        (6,5), (7,1), (8,7), (9,2), (10,3)
+    ]
+    df['high-appearing-rate-num-each-10'] = df.index.map(lambda x : [])
+    for (p,i) in high_appearing_rate_num_each_10:
+        column_name = 'p-{}-num{}'.format(p, i)
+        df['high-appearing-rate-num-each-10'] += df[column_name].apply(lambda x: [x])
+    df['high-appearing-rate-num-each-10-select-ticket'] = df['high-appearing-rate-num-each-10'].map(generate_tickets_without_nums)
+
     return df
 
 def generate_tickets_without_nums(nums):
-    nums.extend([10,42])
     ticket = set()
     while (len(ticket)<7):
         num = np.random.randint(1, 45 + 1)
         if num not in nums:
+            ticket.add(num)
+    
+    return list(ticket)
+
+def generate_tickets_with_nums(nums):
+    ticket = set()
+    while (len(ticket)<7):
+        num = np.random.randint(1, 45 + 1)
+        if num in nums:
+            ticket.add(num)
+    
+    return list(ticket)
+
+def generate_tickets_8_with_nums(nums):
+    ticket = set()
+    while (len(ticket)<8):
+        num = np.random.randint(1, 45 + 1)
+        if num in nums:
             ticket.add(num)
     
     return list(ticket)
@@ -174,6 +270,25 @@ def calculate_statistic(df):
 def generate_random_ticket(any):
     ticket = set()
     while (len(ticket)<7):
+        ticket.add(np.random.randint(1, 45 + 1))
+    
+    return list(ticket)
+
+def generate_random_ticket_12(any):
+    ticket = set()
+    while (len(ticket)<12):
+        ticket.add(np.random.randint(1, 45 + 1))
+    
+    return list(ticket)
+def generate_random_ticket_15(any):
+    ticket = set()
+    while (len(ticket)<15):
+        ticket.add(np.random.randint(1, 45 + 1))
+    
+    return list(ticket)
+def generate_random_ticket_21(any):
+    ticket = set()
+    while (len(ticket)<21):
         ticket.add(np.random.randint(1, 45 + 1))
     
     return list(ticket)
