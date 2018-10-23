@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
 import pydot
 import json
+import sys
 
 def main():
     data_df = pd.read_csv('resource/oz-latest-df-1-data.csv')
@@ -42,7 +43,7 @@ def main():
     # # features = np.array(features)
     # # print(features)
     result_dict={}
-    for i in range(1, 2):
+    for i in range(1, 46):
         predict_label, predict_accurate, feature_list = training_for(data_df, i, predict_features)
         result_dict[i]={'label':predict_label, 'accurate': predict_accurate, 'features': feature_list}
 
@@ -61,15 +62,15 @@ def main():
 
 def training_for(data_df, i, predict_features):
     less_important_column =[]
-    keep_going =True
+    keep_going =3
     
     balanced_data_df = balanced_dataset(data_df, i)
     
-    while keep_going:
+    while keep_going>0:
         feature_list, features, labels = seperate_features_label(balanced_data_df, i, less_important_column)
 
         # Split the data into training and testing sets
-        train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size = 0.20, random_state = 37)
+        train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size = 0.20, random_state = len(feature_list))
 
         # print('Training Features Shape:', train_features.shape)
         # print('Training Labels Shape:', train_labels.shape)
@@ -89,7 +90,7 @@ def training_for(data_df, i, predict_features):
         # Average baseline error: 1.5 degrees.
 
         # Instantiate model with 1000 decision trees
-        rf = RandomForestClassifier(n_estimators = 1000, random_state = 37, class_weight='balanced')
+        rf = RandomForestClassifier(n_estimators = (128+(450-len(feature_list))), random_state = 37, class_weight='balanced')
         # Train the model on training data
         rf.fit(train_features, train_labels)
 
@@ -100,7 +101,7 @@ def training_for(data_df, i, predict_features):
         errors = evaluations == test_labels
         count = [1 for e in errors if e]
         accurate = len(count)/len(errors)
-        print(str(i), ': ', accurate)
+        # print(str(i), ': ', accurate)
 
         # # Print out the mean absolute error (mae)
         # print('Mean Absolute Error:', round(np.mean(errors), 2))
@@ -116,18 +117,25 @@ def training_for(data_df, i, predict_features):
         # Print out the feature and importances 
         # [print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importances]
         if feature_importances[-1][1]*3<feature_importances[0][1]:
-            print('feature_list_size: ', len(feature_list))
-            print('Variable: {:20} Importance: {}'.format(*feature_importances[0]))
-            print('Variable: {:20} Importance: {}'.format(*feature_importances[-1]))
+            sys.stdout.write("*")
+            sys.stdout.flush()
+            # print('feature_list_size: ', len(feature_list))
+            # print("accurate: ", accurate)
+            # print('Variable: {:20} Importance: {}'.format(*feature_importances[0]))
+            # print('Variable: {:20} Importance: {}'.format(*feature_importances[-1]))
             less_important_column.append(feature_importances[-1][0])
+            keep_going=3
         else:
-            keep_going=False
+            print("accurate: ", accurate)
+            keep_going -=1
+
     
-    print(i, " : ", feature_list)
+    print("\n", i, " : ", feature_list)
+    print(i, " : ", accurate)
     # prediction
-    prediction_label = rf.predict(np.array(predict_features).reshape(1, -1))
+    prediction_label = rf.predict(np.array(predict_features[feature_list]).reshape(1, -1))
     print(i, prediction_label)
-    return prediction_label, accurate, feature_list
+    return str(prediction_label.flat[0]), accurate, feature_list
 
 
 
