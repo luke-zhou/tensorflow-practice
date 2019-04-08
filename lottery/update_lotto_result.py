@@ -45,18 +45,8 @@ def update_result_file():
             result_file.writerow([result['DrawNumber'], draw_date.strftime('%Y%m%d')]+result['PrimaryNumbers']+result['SecondaryNumbers'])
     csvfile.close()
 
-def update_ozlotto_latest_result():
-    missing_results = []
-    part_results = get_result(1046, 1095)
-    missing_results.extend(part_results)
-    part_results = get_result(1096, 1145)
-    missing_results.extend(part_results)
-    part_results = get_result(1146, 1195)
-    missing_results.extend(part_results)
-    part_results = get_result(1196, 1245)
-    missing_results.extend(part_results)
-    part_results = get_result(1246, 1269)
-    missing_results.extend(part_results)
+def update_ozlotto_latest_result(from_draw, to_draw):
+    missing_results = get_result(from_draw, to_draw)
 
     missing_results.sort(key = lambda result: result['DrawNumber'])
     print(len(missing_results))
@@ -110,7 +100,4 @@ def add_ozlotto_result(draw):
     csvfile.close() 
 
 if __name__ == '__main__':
-    # for i in range(1271, 1288):
-    #     add_ozlotto_result(i)
-    update_powerball_latest_result()
-    # get_result_p(996,1000)
+    update_ozlotto_latest_result(1288, 1311)

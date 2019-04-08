@@ -6,11 +6,16 @@ from sklearn.tree import export_graphviz
 import pydot
 import json
 import sys
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 def main():
     data_df = pd.read_csv('resource/oz-latest-df-1-data.csv')
     data_df = pd.get_dummies(data_df)
     result =data_df.head(5)
+    data_df.plot.line()
+    exit()
     print('head-5:\n', result)
     print('The shape of our features is:', data_df.shape)
 
@@ -153,6 +158,8 @@ def balanced_dataset(data_df, num):
     non_appear_df = data_df[data_df['current-{}'.format(num)] == False]
     # print('appear: ', appear_df.shape)
     # print('not appear: ', non_appear_df.shape)
+    # appear_df.describe().to_csv('resource/oz-latest-df-1-data-appear-describe.csv')
+    # non_appear_df.describe().to_csv('resource/oz-latest-df-1-data-non-appear-describe.csv')
     sample_non_appear_df = non_appear_df.sample(n=appear_df.shape[0])
 
     combined_df =  appear_df.append(sample_non_appear_df)
