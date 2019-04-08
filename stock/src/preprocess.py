@@ -1,6 +1,6 @@
-import csv
+import pandas as pd
 
-def preproces(file_name, feature_group_size, result_group_size):
+def preproces_old(file_name, feature_group_size, result_group_size):
     group_records =[]
     with open(file_name) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -69,6 +69,11 @@ def n_group(list, n):
 def is_group_valid(list):
     return not any(any(e=='null' or e =='0' for e in r) for r in list)
 
+def preprocess(filename):
+    data_df = pd.read_csv(filename)
+    print(data_df.shape)
+    print(data_df.describe())
+
 if __name__ == '__main__':
     # preproces('../data/test-data.csv')
-    preproces('../data/cba-data.csv', 10, 3)
+    preprocess('../data/cba-data.csv')
