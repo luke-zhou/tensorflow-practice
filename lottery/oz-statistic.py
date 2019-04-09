@@ -8,6 +8,7 @@ import time
 def main():
     print('main')
     lottery_df = pd.read_csv('resource/Ozlotto-latest.csv')
+    calculate_statistic(lottery_df)
     result = calculate_latest_result(lottery_df)
     # print(result)
     display_result(result)
@@ -58,8 +59,6 @@ def calculate_latest_result(lottery_df):
         column = 'num'+str(i)
         # print(column)
         # print(lottery_df[column])
-        lottery_df[column+'%3'] = lottery_df[column]%3
-        lottery_df[column+'/3'] = ((lottery_df[column]-1)/15).apply(np.int64)
         
         histogram_mod = generate_histogram(lottery_df, column+'%3')
         histogram_divide = generate_histogram(lottery_df, column+'/3')
@@ -82,8 +81,6 @@ def calculate_latest_result(lottery_df):
         # print(column)
 
         # print(lottery_df[column])
-        lottery_df[column+'%3'] = lottery_df[column]%3
-        lottery_df[column+'/3'] = ((lottery_df[column]-1)/15).apply(np.int64)
         
         histogram_mod = generate_histogram(lottery_df, column+'%3')
         histogram_divide = generate_histogram(lottery_df, column+'/3')
@@ -103,7 +100,17 @@ def calculate_latest_result(lottery_df):
         # print(lottery_df[column+'%3'])
         # print(lottery_df[column+'/3'])
     return result
+def calculate_statistic(df):
+    for i in range(1, 8):
+        column = 'num'+str(i)
+        df[column+'%3'] = df[column]%3
+        df[column+'/3'] = ((df[column]-1)/15).apply(np.int64)
 
+    for i in range(1, 3):
+        column = 'sup'+str(i)
+        df[column+'%3'] = df[column]%3
+        df[column+'/3'] = ((df[column]-1)/15).apply(np.int64)
+ 
 def display_result(result):
     for key, value in result.items():
         print(key)
@@ -112,6 +119,7 @@ def display_result(result):
 
 def verify(num):
     lottery_df = pd.read_csv('resource/Ozlotto-latest.csv')
+    calculate_statistic(lottery_df)
     for i in range(num):
         last_draw = lottery_df.iloc[-1]
         # print(last_draw)
@@ -127,20 +135,22 @@ def verify(num):
 
 def calculate_include_score(draw, statistic):
     # print(draw)
-    nums = np.array(draw.drop(['draw_number','date']))
+    nums = np.array(draw.drop(['draw_number','date']))[:7]
     # print(nums)
+    # print(list(zip(nums, [value['potential_nums'] for value in statistic.values()])))
     result = [num in includes for num, includes in zip(nums, [value['potential_nums'] for value in statistic.values()])]
     # print(result)
     return len(list(filter(lambda x: x, result)))
 
 def calculate_exclude_score(draw, statistic):
     # print(draw)
-    nums = np.array(draw.drop(['draw_number','date']))
+    nums = np.array(draw.drop(['draw_number','date']))[:7]
     # print(nums)
+    # print(list(zip(nums, [value['potential_excludes'] for value in statistic.values()])))
     result = [num in excludes for num, excludes in zip(nums, [value['potential_excludes'] for value in statistic.values()])]
     # print(result)
     return len(list(filter(lambda x: x, result)))
 
 if  __name__  == '__main__':
-    # verify(20)
-    main()
+    verify(20)
+    # main()
