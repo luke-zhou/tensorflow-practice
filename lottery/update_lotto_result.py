@@ -100,4 +100,4 @@ def add_ozlotto_result(draw):
     csvfile.close() 
 
 if __name__ == '__main__':
-    update_ozlotto_latest_result(1288, 1311)
+    update_ozlotto_latest_result(1312, 1312)
