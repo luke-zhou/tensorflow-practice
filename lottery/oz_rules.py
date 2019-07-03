@@ -1,4 +1,5 @@
 from statistics import mean, pstdev
+import oz_generator as generator
 
 def random_select_rule():
     return {
@@ -37,3 +38,10 @@ def rules_with_specified_num(num):
         "condition": lambda nums : True,
         "prefill": [num]
     }
+
+def verify_rule(rule):
+    ticket = generator.generate_ticket(45, [rule["condition"]] , [rule["prefill"]])
+    print(ticket)
+
+if __name__=='__main__':
+    verify_rule(rules_with_specified_num(1))

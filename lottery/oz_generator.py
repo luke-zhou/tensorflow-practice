@@ -13,11 +13,12 @@ def random_set(prefill =[]):
     
     return sorted(list(result))
 
-def generate_ticket(size, conditions, prefill=[]):
+def generate_ticket(size, conditions, prefills):
     ticket =[]
     time_out = 1000
+    prefill_flatten = [num for prefill in prefills for num in prefill]
     while len(ticket) < size and time_out>0:
-        nums = random_set(prefill)
+        nums = random_set(prefill_flatten)
         condition_results = [condition(nums) for condition in conditions]
         if all(condition_results):
             ticket.append(nums)

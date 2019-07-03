@@ -22,13 +22,19 @@ def benchmark(size = 500):
             if x["description"] != y["description"]:
                 test_block(test_data, [x, y])
 
+    for x in rules():
+        for y in rules():
+            for z in rules():
+                if x["description"] != y["description"] and x["description"] != z["description"] and y["description"] != z["description"]:
+                    test_block(test_data, [x, y, z])
+
 def test_block(test_data, rules):
     print("-"*70)
 
     print([rule["description"] for rule in rules])
     result={"results":[]}
     for original_set in test_data:
-        ticket = generator.generate_ticket(45, [rule["condition"] for rule in rules])
+        ticket = generator.generate_ticket(45, [rule["condition"] for rule in rules], [ num for rule in rules for num in rule["prefill"]])
         if ticket:
             verify_result = verify_ticket(original_set, ticket)
             result["results"].append(summarize_verify_result(verify_result))
