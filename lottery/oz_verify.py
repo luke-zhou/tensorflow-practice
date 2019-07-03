@@ -10,6 +10,10 @@ def verify_ticket(original_set, ticket):
     match_count_lst=[result['match_count'] for result in result['results']]
     result['average_match_count'] =mean(match_count_lst)
     result['pstd_match_count'] =pstdev(match_count_lst)
+    win_match = [match for match in match_count_lst if match >2]
+    result['win_match']=win_match
+    result['win_time']=len(win_match)
+    result['win_price']= sum([2**(match-3) for match in win_match])
     return result
 
 if __name__ == '__main__':
