@@ -1,5 +1,6 @@
 import random
 import time
+from statistics import mean, pstdev
 
 millis = int(round(time.time() * 1000))
 random.seed(a = millis)
@@ -24,6 +25,24 @@ def random_ticket_with_neighbout_num(size):
         nums = random_set()
         nums_temp = [num+1 for num in nums]
         if len(set(nums) & set(nums_temp))>0:
+            ticket.append(nums)
+    return ticket
+
+def random_ticket_with_lower_average(size):
+    ticket =[]
+    while len(ticket) < size:
+        nums = random_set()
+        
+        if mean(nums)<23:
+            ticket.append(nums)
+    return ticket
+
+def random_ticket_with_higher_average(size):
+    ticket =[]
+    while len(ticket) < size:
+        nums = random_set()
+        
+        if mean(nums)>23:
             ticket.append(nums)
     return ticket
 

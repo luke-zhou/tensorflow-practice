@@ -10,33 +10,24 @@ def benchmark(size = 500):
     print("-"*20+" start calculating benchmark "+"-"*20)
     print("testing size is", size)
     test_data = load_data(size)
-    
-    print("-"*70)
-    
-    print("random select 45 sets in one ticket:")
-    result={"results":[]}
-    for original_set in test_data:
-        ticket = generator.random_ticket(45)
-        verify_result = verify_ticket(original_set, ticket)
-        result["results"].append(summarize_verify_result(verify_result))
-    display_summary(result)
 
-    print("-"*70)
-    
-    print("random select 45 sets for one number each in one ticket:")
-    result={"results":[]}
-    for original_set in test_data:
-        ticket = generator.random_ticket_each()
-        verify_result = verify_ticket(original_set, ticket)
-        result["results"].append(summarize_verify_result(verify_result))
-    display_summary(result)
+    test_block(test_data, "random select 45 sets in one ticket", "random_ticket", 45)
+    test_block(test_data, "random select 45 sets for one number each in one ticket", "random_ticket_each")
+    test_block(test_data, "random select 45 sets which has neighbour numbers in one ticket", "random_ticket_with_neighbout_num", 45)
+    test_block(test_data, "random select 45 sets with lower average in one ticket", "random_ticket_with_lower_average", 45)
+    test_block(test_data, "random select 45 sets with higher average in one ticket", "random_ticket_with_higher_average", 45)
 
+def test_block(test_data, description, method, args=None):
     print("-"*70)
 
-    print("random select 45 sets which has neighbour numbers in one ticket:")
+    print(description)
     result={"results":[]}
     for original_set in test_data:
-        ticket = generator.random_ticket_with_neighbout_num(45)
+        method_to_call = getattr(generator, method)
+        if args is None:
+            ticket = method_to_call()
+        else:
+            ticket = method_to_call(args)
         verify_result = verify_ticket(original_set, ticket)
         result["results"].append(summarize_verify_result(verify_result))
     display_summary(result)
