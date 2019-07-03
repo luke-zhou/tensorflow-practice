@@ -24,7 +24,17 @@ def rules():
         "description": "higher average",
         "condition": lambda nums : mean(nums)>23,
         "prefill": []
-    }
+    },
+    {
+        "description": "all odd",
+        "condition": lambda nums : all([num%2==1 for num in nums]),
+        "prefill": []
+    },
+    {
+        "description": "all even",
+        "condition": lambda nums : all([num%2==0 for num in nums]),
+        "prefill": []
+    },
     ]
 
     for i in range(1, 46):

@@ -14,43 +14,53 @@ def benchmark(size = 500):
 
     test_block(test_data, [random_select_rule()])
 
-    for rule in rules():
-        test_block(test_data, [rule])
+    # for rule in rules():
+    #     test_block(test_data, [rule])
 
     for x in rules():
         for y in rules():
             if x["description"] != y["description"]:
-                test_block(test_data, [x, y])
+                result_x = test_block(test_data, [x])
+                result_y = test_block(test_data, [y])
+                result = test_block(test_data, [x, y])
+                if is_result_good(result, result_x, result_y):
+                    display_summary(result)
 
-    for x in rules():
-        for y in rules():
-            for z in rules():
-                if x["description"] != y["description"] and x["description"] != z["description"] and y["description"] != z["description"]:
-                    test_block(test_data, [x, y, z])
+def is_result_good(result, result_x, result_y):
+    if result["results"]:
+        items=['average', 'pstd', 'win_time', 'win_price']
+        return any([result[item][0] >= (max(result_x[item][0], result_y[item][0])*1.1) for item in items])
+    else:
+        return False
 
 def test_block(test_data, rules):
     print("-"*70)
 
-    print([rule["description"] for rule in rules])
+    if len(rules)>1:
+        print([rule["description"] for rule in rules])
     result={"results":[]}
     for original_set in test_data:
-        ticket = generator.generate_ticket(45, [rule["condition"] for rule in rules], [ num for rule in rules for num in rule["prefill"]])
+        conditions = [rule["condition"] for rule in rules]
+        prefills = [rule["prefill"] for rule in rules]
+        ticket = generator.generate_ticket(45, conditions, prefills)
         if ticket:
             verify_result = verify_ticket(original_set, ticket)
             result["results"].append(summarize_verify_result(verify_result))
-    display_summary(result)
 
-def display_summary(result):
-    if result["results"]:
+    if result["results"]: 
         average_lst=[result['average'] for result in result['results']]
         pstd_lst=[result['pstd'] for result in result['results']]
         win_time_lst=[result['win_time'] for result in result['results']] 
         win_price_lst=[result['win_price'] for result in result['results']] 
-
         result['average'] =(mean(average_lst), pstdev(average_lst))
         result['pstd'] =(mean(pstd_lst),pstdev(pstd_lst))
         result['win_time'] =(mean(win_time_lst), pstdev(win_time_lst))
         result['win_price'] =(mean(win_price_lst), pstdev(win_price_lst))
+    # display_summary(result)
+    return result
+
+def display_summary(result):
+    if result["results"]:
         print('average',result['average'])
         print('pstd',result['pstd'])
         print('win_time',result['win_time'])
