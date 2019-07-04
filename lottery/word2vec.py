@@ -11,7 +11,7 @@ def main():
     train_features_str =[[str(num) for num in row]for row in train_features]
  
     #training word2vec on 3 sentences
-    model = Word2Vec(train_features_str, window=7, min_count=1, size=5, sg=0, negative=1)
+    model = Word2Vec(train_features_str, window=7, min_count=1, size=3, sg=0, negative=1)
 
     #using the model
     #The new trained model can be used similar to the pre-trained ones.

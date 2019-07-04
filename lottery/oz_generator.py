@@ -15,7 +15,7 @@ def random_set(prefill =[]):
 
 def generate_ticket(size, conditions, prefills):
     ticket =[]
-    time_out = 1000
+    time_out = 10000
     prefill_flatten = [num for prefill in prefills for num in prefill]
     while len(ticket) < size and time_out>0:
         nums = random_set(prefill_flatten)
