@@ -131,8 +131,8 @@ def existing_rules():
     }
     ]
 
-    for i in range(1, 46):
-        rules.append(rules_with_specified_num(i))
+    # for i in range(1, 46):
+    #     rules.append(rules_with_specified_num(i))
     
     return rules
 
