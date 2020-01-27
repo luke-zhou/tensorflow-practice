@@ -10,12 +10,9 @@ def calculate(generator_type, ticket_size, sample_size):
     if generator_type =='simple':
         generator_method = generator.random_ticket
         method_args=[]
-    elif generator_type=='system8':
+    elif 'system' in generator_type:
         generator_method = generator.system_ticket
-        method_args=[8]
-    elif generator_type=='system9':
-        generator_method = generator.system_ticket
-        method_args=[9]
+        method_args=[int(generator_type[6:])]
         
     all_sample_results = []
     for _ in range(sample_size):
@@ -55,3 +52,42 @@ if __name__ =='__main__':
     print(result['pstd_prize'])
     print(result['highest_division'])
 
+    result = calculate('simple', 360, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('system10', 3, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('simple', 330, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('system11', 1, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('simple', 792, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('system12', 1, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('simple', 1716, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])
+
+    result = calculate('system13', 1, 20)
+    print(result['average_prize'])
+    print(result['pstd_prize'])
+    print(result['highest_division'])

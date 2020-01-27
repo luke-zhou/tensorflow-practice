@@ -37,10 +37,6 @@ def convert_system_set_to_normal(s):
     
     return normal_nums
 
-                    
-                    
-
-
 def convert_all_sets_to_nornmal(ticket):
     new_ticket = []
     for x in ticket:
@@ -49,8 +45,7 @@ def convert_all_sets_to_nornmal(ticket):
         elif len(x) >7:
             new_ticket.extend(convert_system_set_to_normal(x))
     
-    return new_ticket
-        
+    return new_ticket      
 
 def verify_ticket(draw, ticket):
     result = {'details':[verify_nums(draw, nums) for nums in ticket]}
