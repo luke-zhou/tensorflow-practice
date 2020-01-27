@@ -31,10 +31,10 @@ def benchmark(size = 500):
     # statistics_benchmark(rule_lst, data, size)
     # generator_benchmark(new_rule_lst, rule_lst, skip_combine, data, size)
 
-    survive_test(rule_lst, data, size)
+    # survive_test(rule_lst, data, size)
 
 def survive_test(rules, data, size):
-    ticket = generator.random_ticket(100000000)
+    ticket = generator.random_ticket(10000)
     print("-"*70)
     print("ticket size", len(ticket))
     for rule in rules:
@@ -121,7 +121,7 @@ def test_block(test_data, rules, display_desc=True):
         result['pstd'] =(mean(pstd_lst),pstdev(pstd_lst))
         result['win_time'] =(mean(win_time_lst), pstdev(win_time_lst))
         result['win_price'] =(mean(win_price_lst), pstdev(win_price_lst))
-    # display_summary(result)
+    display_summary(result)
     return result
 
 def display_summary(result):
