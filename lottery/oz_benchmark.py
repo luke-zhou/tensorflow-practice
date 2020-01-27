@@ -21,7 +21,9 @@ def benchmark(size = 500):
 
     test_data = random.sample(data, size)
 
-    test_block(test_data, [random_select_rule()])
+    baseline = test_block(test_data, [random_select_rule()])
+    display_summary(baseline)
+    print(baseline)
 
     # for rule in rules():
     #     test_block(test_data, [rule])
@@ -33,22 +35,46 @@ def benchmark(size = 500):
 
     # survive_test(rule_lst, data, size)
 
+def split_data(data, size):
+    random.shuffle(data)
+    train = data[:size] 
+    test = data[size:]
+    # print(len(train))
+    # print(len(test))
+    return train, test
+
 def survive_test(rules, data, size):
     ticket = generator.random_ticket(10000)
     print("-"*70)
     print("ticket size", len(ticket))
-    for rule in rules:
-        match_count = display_statistic(data, [rule])
-        survive_ticket =[]
-        for nums in ticket:
-            should_meet = random.randint(0,len(data)) <= match_count
-            actual_meet = rule['condition'](nums)
-            if should_meet==actual_meet:
-                survive_ticket.append(nums)
-        ticket = survive_ticket
-        print("ticket size", len(ticket))    
-        
+    ticket_left=[]
+    for nums in ticket:
+        under_rules=[]
+        for rule in rules:
+            if rule['condition'](nums):
+                under_rules.append(rule)
+        train, test = split_data(data, size)
+        match_count = display_statistic(train, under_rules)
+        if random.randint(0,len(data)) <= match_count:
+            ticket_left.append(nums)
 
+    print(len(ticket_left))
+    ticket_final = random.sample(ticket_left, 45)
+    print(len(ticket_final))
+    result={"results":[]}
+    for original_set in test:
+        verify_result = verify_ticket(original_set, ticket_final)
+        result["results"].append(summarize_verify_result(verify_result))
+    average_lst=[result['average'] for result in result['results']]
+    pstd_lst=[result['pstd'] for result in result['results']]
+    win_time_lst=[result['win_time'] for result in result['results']] 
+    win_price_lst=[result['win_price'] for result in result['results']] 
+    result['average'] =(mean(average_lst), pstdev(average_lst))
+    result['pstd'] =(mean(pstd_lst),pstdev(pstd_lst))
+    result['win_time'] =(mean(win_time_lst), pstdev(win_time_lst))
+    result['win_price'] =(mean(win_price_lst), pstdev(win_price_lst))
+    display_summary(result)
+    print(result)
 
 def statistics_benchmark(rules, data, size):
     for rule in rules:
@@ -59,10 +85,10 @@ def statistics_benchmark(rules, data, size):
            display_statistic(data, [x, y]) 
 
 def display_statistic(data, rules):
-    print("-"*70)
-    print([rule["description"] for rule in rules])
+    # print("-"*70)
+    # print([rule["description"] for rule in rules])
     meet_count = len([1 for nums in data if all([rule['condition'](nums) for rule in rules])])
-    print("meet condition", str(meet_count)+"/"+str(len(data)))  
+    # print("meet condition", str(meet_count)+"/"+str(len(data)))  
     return meet_count
 
 def generator_benchmark(new_rule_lst, rule_lst, skip_combine, data, size):
