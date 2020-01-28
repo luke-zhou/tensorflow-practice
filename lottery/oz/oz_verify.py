@@ -1,6 +1,7 @@
 import oz_generator as generator
 from statistics import mean, pstdev
 import json
+from itertools import combinations 
 
 divisions={
     (3, True):(7,1),
@@ -25,16 +26,8 @@ def verify_nums(draw, nums):
         }
 
 def convert_system_set_to_normal(s):
-    normal_nums=[]
-    for i in range(len(s)):
-        for j in range(i+1, len(s)):
-            for k in range(j+1, len(s)):
-                for l in range(k+1, len(s)):
-                    for m in range(l+1, len(s)):
-                        for n in range(m+1, len(s)):
-                            for o in range(n+1, len(s)):
-                                normal_nums.append([s[i],s[j], s[k], s[l], s[m], s[n],s[o]])
-    
+    results = combinations(s, 7)
+    normal_nums = [list(r) for r in list(results)]
     return normal_nums
 
 def convert_all_sets_to_nornmal(ticket):
@@ -53,7 +46,11 @@ def verify_ticket(draw, ticket):
     result['total_prize']=total_prize
     divisions = [result['division'] for result in result['details'] if result['division'] is not None]
     highest_division = min(divisions) if divisions else None
+    jackpot_count = len([d for d in divisions if d ==1])
+    jackpot_percentage = jackpot_count/len(ticket)
     result['highest_division'] =highest_division
+    result['jackpot_count'] =jackpot_count
+    result['jackpot_percentage'] =jackpot_percentage
     # match_count_lst=[result['match_count'] for result in result['results']]
     # result['average_match_count'] =mean(match_count_lst)
     # result['pstd_match_count'] =pstdev(match_count_lst)
@@ -82,23 +79,26 @@ if __name__ == '__main__':
     # print(nums)
     # print(verify_nums(draw, nums))
 
-    # new_ticket = generator.random_ticket(20)
+    new_ticket = generator.random_ticket(20000000)
     # print(new_ticket)
-    # result = verify_ticket(draw, new_ticket)
-    # win_result =[ x for x in result['details'] if x['prize']>0]
+    result = verify_ticket(draw, new_ticket)
+    win_result =[ x for x in result['details'] if x['prize']>0]
     # print(json.dumps(win_result, indent=4))
-    # print(result['total_prize'])
-    # print(result['highest_division'])
+    print(result['total_prize'])
+    print(result['highest_division'])
+    print(result['jackpot_count'])
+    print(result['jackpot_percentage'])
 
     # system_set=[1,2,3,4,5,6,7, 8, 9]
     # result = convert_system_set_to_normal(system_set)
     # print(result)
     # print(len(result))
 
-    ticket = generator.system_ticket(9, 50)
-    print(ticket)
-    result = verify_ticket(draw, ticket)
-    win_result =[ x for x in result['details'] if x['prize']>0]
-    print(json.dumps(win_result, indent=4))
-    print(result['total_prize'])
-    print(result['highest_division'])
+    # ticket = generator.system_ticket(20, 1)
+    # print(ticket)
+    # result = verify_ticket(draw, ticket)
+    # win_result =[ x for x in result['details'] if x['prize']>0]
+    # print(json.dumps(win_result, indent=4))
+    # print(result['total_prize'])
+    # print(result['highest_division'])
+
