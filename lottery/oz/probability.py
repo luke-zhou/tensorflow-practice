@@ -30,6 +30,11 @@ def calculate(generator_type, ticket_size, sample_size):
     result['average_prize'] = mean(total_prizes)
     result['pstd_prize'] = pstdev(total_prizes)
     result['highest_division'] = min(divisions) if divisions else None
+    result['total_jackpot'] = sum([x['jackpot_count'] for x in all_sample_results])
+    result['jackpot_rate'] = result['total_jackpot']/sample_size
+    result['samples_with_jackpot'] = len([x for x in all_sample_results if x['jackpot_count']>0])
+    result['samples_with_jackpot_rate'] = result['samples_with_jackpot']/sample_size
+
     return result
 
 if __name__ =='__main__':
@@ -76,6 +81,10 @@ if __name__ =='__main__':
         print(result['average_prize'])
         print(result['pstd_prize'])
         print(result['highest_division'])
+        print(result['total_jackpot'])
+        print(result['jackpot_rate'])
+        print(result['samples_with_jackpot'])
+        print(result['samples_with_jackpot_rate'])
 
 
     # result = calculate('simple', 400, 20)

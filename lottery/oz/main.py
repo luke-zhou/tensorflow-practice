@@ -6,24 +6,50 @@ def to_csv():
     f7=factorial(7)
     sample_size=5000
     for j in range(8, 21):
+        ticket_size = int(factorial(j)/(f7*factorial(j-7)))
         results = []
+        benchmark_results=[]
         for i in range(10, 101, 10):
             result = calculate('system'+str(j), i, sample_size)
             results.append(result)
 
+        for i in range(10, 101, 10):
+            result = calculate('simple', i*ticket_size, sample_size)
+            benchmark_results.append(result)
+
         with open('output/system-ticket-probability.csv', 'a', newline='') as csv_file:
             f = csv.writer(csv_file, delimiter=',')
-            row = ['compare different ticket size of the same system ticket']
-            f.writerow(row)
             row =['system'+str(j)]
             f.writerow(row)
             row = ['ticke size']+[i for i in range(10,101,10)]
             f.writerow(row)
             row = ['average prize']+[r['average_prize'] for r in results]
             f.writerow(row)
+            row = ['benchmark average prize']+[r['average_prize'] for r in benchmark_results]
+            f.writerow(row)
             row = ['pstd prize']+[r['pstd_prize'] for r in results]
             f.writerow(row)
+            row = ['benchmark pstd prize']+[r['pstd_prize'] for r in benchmark_results]
+            f.writerow(row)
             row = ['highest division']+[r['highest_division'] for r in results]
+            f.writerow(row)
+            row = ['benchmark highest_division']+[r['highest_division'] for r in benchmark_results]
+            f.writerow(row)
+            row = ['total_jackpot']+[r['total_jackpot'] for r in results]
+            f.writerow(row)
+            row = ['benchmark total_jackpot']+[r['total_jackpot'] for r in benchmark_results]
+            f.writerow(row)
+            row = ['jackpot_rate']+[r['jackpot_rate'] for r in results]
+            f.writerow(row)
+            row = ['benchmark jackpot_rate']+[r['jackpot_rate'] for r in benchmark_results]
+            f.writerow(row)
+            row = ['samples_with_jackpot']+[r['samples_with_jackpot'] for r in results]
+            f.writerow(row)
+            row = ['benchmark samples_with_jackpot']+[r['samples_with_jackpot'] for r in benchmark_results]
+            f.writerow(row)
+            row = ['samples_with_jackpot_rate']+[r['samples_with_jackpot_rate'] for r in results]
+            f.writerow(row)
+            row = ['benchmark samples_with_jackpot_rate']+[r['samples_with_jackpot_rate'] for r in benchmark_results]
             f.writerow(row)
         csv_file.close()
 

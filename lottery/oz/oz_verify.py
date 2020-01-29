@@ -25,29 +25,30 @@ def verify_nums(draw, nums):
         'prize': division_details[1] 
         }
 
-def convert_system_set_to_normal(s):
+def convert_system_set_to_standard(s):
     results = combinations(s, 7)
     normal_nums = [list(r) for r in list(results)]
     return normal_nums
 
-def convert_all_sets_to_nornmal(ticket):
+def convert_all_sets_to_standard(ticket):
     new_ticket = []
     for x in ticket:
         if len(x) ==7:
             new_ticket.append(x)
         elif len(x) >7:
-            new_ticket.extend(convert_system_set_to_normal(x))
+            new_ticket.extend(convert_system_set_to_standard(x))
     
     return new_ticket      
 
 def verify_ticket(draw, ticket):
-    result = {'details':[verify_nums(draw, nums) for nums in ticket]}
+    standard_ticket = convert_all_sets_to_standard(ticket)
+    result = {'details':[verify_nums(draw, nums) for nums in standard_ticket]}
     total_prize = sum([result['prize'] for result in result['details']])
     result['total_prize']=total_prize
     divisions = [result['division'] for result in result['details'] if result['division'] is not None]
     highest_division = min(divisions) if divisions else None
     jackpot_count = len([d for d in divisions if d ==1])
-    jackpot_percentage = jackpot_count/len(ticket)
+    jackpot_percentage = jackpot_count/len(standard_ticket)
     result['highest_division'] =highest_division
     result['jackpot_count'] =jackpot_count
     result['jackpot_percentage'] =jackpot_percentage
@@ -79,26 +80,28 @@ if __name__ == '__main__':
     # print(nums)
     # print(verify_nums(draw, nums))
 
-    new_ticket = generator.random_ticket(20000000)
-    # print(new_ticket)
-    result = verify_ticket(draw, new_ticket)
-    win_result =[ x for x in result['details'] if x['prize']>0]
-    # print(json.dumps(win_result, indent=4))
-    print(result['total_prize'])
-    print(result['highest_division'])
-    print(result['jackpot_count'])
-    print(result['jackpot_percentage'])
+    # new_ticket = generator.random_ticket(2000)
+    # # print(new_ticket)
+    # result = verify_ticket(draw, new_ticket)
+    # win_result =[ x for x in result['details'] if x['prize']>0]
+    # # print(json.dumps(win_result, indent=4))
+    # print(result['total_prize'])
+    # print(result['highest_division'])
+    # print(result['jackpot_count'])
+    # print(result['jackpot_percentage'])
 
     # system_set=[1,2,3,4,5,6,7, 8, 9]
     # result = convert_system_set_to_normal(system_set)
     # print(result)
     # print(len(result))
 
-    # ticket = generator.system_ticket(20, 1)
-    # print(ticket)
-    # result = verify_ticket(draw, ticket)
-    # win_result =[ x for x in result['details'] if x['prize']>0]
+    ticket = generator.system_ticket(30, 10)
+    print(ticket)
+    result = verify_ticket(draw, ticket)
+    win_result =[ x for x in result['details'] if x['prize']>0]
     # print(json.dumps(win_result, indent=4))
-    # print(result['total_prize'])
-    # print(result['highest_division'])
+    print(result['total_prize'])
+    print(result['highest_division'])
+    print(result['jackpot_count'])
+    print(result['jackpot_percentage'])
 
