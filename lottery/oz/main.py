@@ -9,12 +9,12 @@ def to_csv():
         ticket_size = int(factorial(j)/(f7*factorial(j-7)))
         results = []
         benchmark_results=[]
-        for i in range(10, 101, 10):
-            result = calculate('system'+str(j), i, sample_size)
+        for i in range(1, max(2,19-j)):
+            result = calculate('system'+str(j), i*10, sample_size)
             results.append(result)
 
-        for i in range(10, 101, 10):
-            result = calculate('simple', i*ticket_size, sample_size)
+        for i in range(1, max(2,19-j)):
+            result = calculate('simple', i*10*ticket_size, sample_size)
             benchmark_results.append(result)
 
         with open('output/system-ticket-probability.csv', 'a', newline='') as csv_file:
