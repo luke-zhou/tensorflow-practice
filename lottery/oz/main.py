@@ -9,11 +9,13 @@ def to_csv():
         ticket_size = int(factorial(j)/(f7*factorial(j-7)))
         results = []
         benchmark_results=[]
-        for i in range(1, max(2,19-j)):
+        range_up_bound = max(2,14-j)
+        print('range_up_bound: '+str(range_up_bound))
+        for i in range(1, range_up_bound):
             result = calculate('system'+str(j), i*10, sample_size)
             results.append(result)
 
-        for i in range(1, max(2,19-j)):
+        for i in range(1, range_up_bound):
             result = calculate('simple', i*10*ticket_size, sample_size)
             benchmark_results.append(result)
 
