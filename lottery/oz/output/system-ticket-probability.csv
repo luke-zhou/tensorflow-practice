@@ -1,0 +1,128 @@
+system8
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,2.4074,5.2176,7.6052,9.9174,11.2118
+benchmark average prize,2.1846,4.3024,7.3868,9.7188,11.4644
+pstd prize,12.730743310584813,40.659796485471986,45.56380727024466,55.11513564566452,22.74888438495391
+benchmark pstd prize,6.068782648933804,6.538513152085878,19.923372851000906,33.8692917930092,18.533524560644153
+highest division,3,2,2,2,3
+benchmark highest_division,3,3,3,2,3
+total_jackpot,0,0,0,0,0
+benchmark total_jackpot,0,0,0,0,0
+jackpot_rate,0.0,0.0,0.0,0.0,0.0
+benchmark jackpot_rate,0.0,0.0,0.0,0.0,0.0
+samples_with_jackpot,0,0,0,0,0
+benchmark samples_with_jackpot,0,0,0,0,0
+samples_with_jackpot_rate,0.0,0.0,0.0,0.0,0.0
+benchmark samples_with_jackpot_rate,0.0,0.0,0.0,0.0,0.0
+system9
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,10.4772,22.2896,31.7516,43.9324
+benchmark average prize,10.486,20.9126,32.2864,42.6388
+pstd prize,44.62838872466717,72.97131033385655,89.21221383555057,132.409012647327
+benchmark pstd prize,19.35110859873408,25.608993756881585,52.50899327772339,60.54249693033812
+highest division,3,2,2,2
+benchmark highest_division,3,3,2,2
+total_jackpot,0,0,0,0
+benchmark total_jackpot,0,0,0,0
+jackpot_rate,0.0,0.0,0.0,0.0
+benchmark jackpot_rate,0.0,0.0,0.0,0.0
+samples_with_jackpot,0,0,0,0
+benchmark samples_with_jackpot,0,0,0,0
+samples_with_jackpot_rate,0.0,0.0,0.0,0.0
+benchmark samples_with_jackpot_rate,0.0,0.0,0.0,0.0
+system10
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,76.2684,75.0064,112.1416
+benchmark average prize,35.061,110.9482,105.3488
+pstd prize,2952.7336176433932,181.35836335565006,225.38291139622808
+benchmark pstd prize,43.65408204280558,2828.8856141450397,72.91285989837458
+highest division,1,2,2
+benchmark highest_division,2,1,2
+total_jackpot,1,0,0
+benchmark total_jackpot,0,1,0
+jackpot_rate,0.0002,0.0,0.0
+benchmark jackpot_rate,0.0,0.0002,0.0
+samples_with_jackpot,1,0,0
+benchmark samples_with_jackpot,0,1,0
+samples_with_jackpot_rate,0.0002,0.0,0.0
+benchmark samples_with_jackpot_rate,0.0,0.0002,0.0
+system11
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,141.2282,239.539
+benchmark average prize,136.166,234.1394
+pstd prize,3006.26257577823,3367.6081144454743
+benchmark pstd prize,2829.40360868576,2829.7991229710356
+highest division,1,1
+benchmark highest_division,1,1
+total_jackpot,1,1
+benchmark total_jackpot,1,1
+jackpot_rate,0.0002,0.0002
+benchmark jackpot_rate,0.0002,0.0002
+samples_with_jackpot,1,1
+benchmark samples_with_jackpot,1,1
+samples_with_jackpot_rate,0.0002,0.0002
+benchmark samples_with_jackpot_rate,0.0002,0.0002
+system12
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,318.4752
+benchmark average prize,233.9342
+pstd prize,4324.18722927037
+benchmark pstd prize,134.9580344787223
+highest division,1
+benchmark highest_division,2
+total_jackpot,2
+benchmark total_jackpot,0
+jackpot_rate,0.0004
+benchmark jackpot_rate,0.0
+samples_with_jackpot,2
+benchmark samples_with_jackpot,0
+samples_with_jackpot_rate,0.0004
+benchmark samples_with_jackpot_rate,0.0
+system13
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,679.2684
+benchmark average prize,588.619
+pstd prize,6448.647354349704
+benchmark pstd prize,4004.0305844784702
+highest division,1
+benchmark highest_division,1
+total_jackpot,4
+benchmark total_jackpot,2
+jackpot_rate,0.0008
+benchmark jackpot_rate,0.0004
+samples_with_jackpot,4
+benchmark samples_with_jackpot,2
+samples_with_jackpot_rate,0.0008
+benchmark samples_with_jackpot_rate,0.0004
+system14
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,1125.0364
+benchmark average prize,1171.6608
+pstd prize,5734.007588159876
+benchmark pstd prize,5657.379888406236
+highest division,1
+benchmark highest_division,1
+total_jackpot,3
+benchmark total_jackpot,4
+jackpot_rate,0.0006
+benchmark jackpot_rate,0.0008
+samples_with_jackpot,3
+benchmark samples_with_jackpot,4
+samples_with_jackpot_rate,0.0006
+benchmark samples_with_jackpot_rate,0.0008
+system15
+ticke size,10,20,30,40,50,60,70,80,90,100
+average prize,2153.255
+benchmark average prize,2057.002
+pstd prize,9049.11030937158
+benchmark pstd prize,5681.56995884025
+highest division,1
+benchmark highest_division,1
+total_jackpot,7
+benchmark total_jackpot,4
+jackpot_rate,0.0014
+benchmark jackpot_rate,0.0008
+samples_with_jackpot,7
+benchmark samples_with_jackpot,4
+samples_with_jackpot_rate,0.0014
+benchmark samples_with_jackpot_rate,0.0008
