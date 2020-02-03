@@ -24,7 +24,7 @@ def calculate(generator_type, ticket_size, sample_size):
         # print(json.dumps(win_result, indent=4))
         # print(result['total_prize'])
         # print(result['highest_division'])
-    result={'details':all_sample_results}
+    # result={'details':all_sample_results}
     total_prizes = [x['total_prize'] for x in all_sample_results]
     divisions = [x['highest_division'] for x in all_sample_results if x['highest_division'] is not None]
     result['average_prize'] = mean(total_prizes)
