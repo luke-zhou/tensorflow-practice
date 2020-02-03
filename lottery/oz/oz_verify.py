@@ -42,10 +42,12 @@ def convert_all_sets_to_standard(ticket):
 
 def verify_ticket(draw, ticket):
     standard_ticket = convert_all_sets_to_standard(ticket)
-    result = {'details':[verify_nums(draw, nums) for nums in standard_ticket]}
-    total_prize = sum([result['prize'] for result in result['details']])
+    details = [verify_nums(draw, nums) for nums in standard_ticket]
+    # result = {'details':details}
+    result={}
+    total_prize = sum([result['prize'] for result in details])
     result['total_prize']=total_prize
-    divisions = [result['division'] for result in result['details'] if result['division'] is not None]
+    divisions = [result['division'] for result in details if result['division'] is not None]
     highest_division = min(divisions) if divisions else None
     jackpot_count = len([d for d in divisions if d ==1])
     jackpot_percentage = jackpot_count/len(standard_ticket)

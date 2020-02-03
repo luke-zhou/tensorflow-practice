@@ -10,7 +10,7 @@ def to_csv():
         results = []
         benchmark_results=[]
         range_up_bound = max(2,14-j)
-        print('range_up_bound: '+str(range_up_bound))
+        print('range_up_bound('+str(j)+'): '+str(range_up_bound))
         for i in range(1, range_up_bound):
             result = calculate('system'+str(j), i*10, sample_size)
             results.append(result)
